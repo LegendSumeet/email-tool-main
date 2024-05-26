@@ -92,12 +92,7 @@ export default function LoginPage() {
               value={user.email}
               onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
-            <Link
-              className="text-right text-xs text-slate-500 hover:underline hover:text-slate-300"
-              href="/forgotpassword"
-            >
-              Forgot Password
-            </Link>
+           
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
