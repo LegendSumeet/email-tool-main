@@ -56,7 +56,9 @@ export default function ForgotPasswordPage() {
                 </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-                <Button disabled={email.length >0 ? false : true} onClick={verifyEmail}>
+                <Button
+                variant="success"
+                 disabled={email.length >0 ? false : true} onClick={verifyEmail}>
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Submit"}
                 </Button>
             </CardFooter>

@@ -106,6 +106,7 @@ export default function LoginPage() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button
+          variant="success"
             disabled={
               user.email.length > 0 && user.password.length > 0 ? false : true
             }

@@ -1,5 +1,3 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,8 +23,8 @@ import {
 import { useState } from "react";
 import { Router } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useFetchData } from "./showdatatable";
 import convertJsonToExcel from "@/components/fetchhook";
+import { useData } from "@/components/dataProvider";
 
 interface FormValues {
   companyName: string;
@@ -47,11 +45,13 @@ const FormSchema = z.object({
 });
 
 export default function CompanyInputForm() {
+  const { data, fetchData } = useData();
 
   const [selectedDomain, setSelectedDomain] = useState("");
   const [selectedMailPattern, setSelectedMailPattern] = useState("");
   const [submittedData, setSubmittedData] = useState(false);
   const router = useRouter();
+
   const handleDomainChange = (value: any) => {
     setSelectedDomain(value);
     console.log("Selected Domain:", value);
@@ -81,7 +81,7 @@ export default function CompanyInputForm() {
 
     console.log("Form data to be sent:", formData);
 
-    const isEmpty = Object.values(formData).every((value) => value == "");
+    const isEmpty = Object.values(formData).every((value) => value === "");
 
     if (isEmpty) {
       toast({
@@ -94,13 +94,11 @@ export default function CompanyInputForm() {
   }
 
   function sendDataToAPI(data: FormValues) {
-
     const formData = {
       ...data,
       selectedDomain,
       selectedMailPattern,
     };
-    // Example API call:
     fetch("https://api-codehub.vercel.app/api/conferences/company-input", {
       method: "POST",
       headers: {
@@ -111,10 +109,6 @@ export default function CompanyInputForm() {
       .then((response) => {
         if (response.ok) {
           setSubmittedData(false);
-          
-          
-    
-
           toast({
             title: "Success",
             description: "Form data submitted successfully",
@@ -122,7 +116,7 @@ export default function CompanyInputForm() {
         } else {
           toast({
             title: "Error",
-            description: "Failed to submit form data",
+            description: response.statusText,
           });
         }
       })
@@ -136,19 +130,17 @@ export default function CompanyInputForm() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center py-14">
-
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="w-2/3 space-y-6 flex flex-wrap justify-center"
-      >
-        <div className="flex items-center justify-between w-full space-x-6">
+    <div className="flex flex-row items-center justify-center py-10">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-row justify-center space-x-6"
+        >
           <FormField
             control={form.control}
             name="companyName"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className=" w-10/12">
                 <FormControl>
                   <Input placeholder="Company Name" {...field} />
                 </FormControl>
@@ -160,7 +152,7 @@ export default function CompanyInputForm() {
             control={form.control}
             name="TotalRecords"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-1/2">
                 <FormControl>
                   <Input placeholder="Total Records" {...field} />
                 </FormControl>
@@ -168,28 +160,27 @@ export default function CompanyInputForm() {
               </FormItem>
             )}
           />
-        </div>
-  
-        <div className="flex items-center justify-between w-full space-x-6">
           <FormField
             control={form.control}
             name="mailselectedDomain"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-10/12">
                 <FormControl>
-                  <Input placeholder="Enter company Email" {...field} />
+                  <Input placeholder="Website Domain" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           <Select
+
             onValueChange={(value) => {
               handleDomainChange(value);
             }}
-            
           >
-            <SelectTrigger>
+            <SelectTrigger
+              className=" w-10/12"
+            >
               <SelectValue placeholder="Choose Domain" />
             </SelectTrigger>
             <SelectContent>
@@ -198,15 +189,15 @@ export default function CompanyInputForm() {
               <SelectItem value=".org">.org</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-  
-        <div className="flex items-center justify-between w-full space-x-6">
           <Select
             onValueChange={(value) => {
               handleMailPatternChange(value);
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger
+
+              className=" w-10/12"
+            >
               <SelectValue placeholder="Mail Pattern" />
             </SelectTrigger>
             <SelectContent>
@@ -224,14 +215,15 @@ export default function CompanyInputForm() {
               </SelectItem>
             </SelectContent>
           </Select>
-        </div>
-  
-        <Button type="submit" className="self-center">
-          {submittedData ? "Submitting..." : "Add Item"}
-        </Button>
-      </form>
-    </Form>
-  </div>
-  
+          <Button
+            variant="success"
+
+            type="submit" className="self-center">
+            {submittedData ? "Submitting..." : "Add Item"}
+          </Button>
+        </form>
+      </Form>
+    </div>
+
   );
 }

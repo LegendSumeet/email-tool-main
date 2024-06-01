@@ -1,74 +1,75 @@
-import { useState, useEffect } from "react";
-import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { DataTable } from "./data-table";
 import { columns, SheetError } from "./colums";
-import CompanyInputForm from "./form";
-import { Button } from "@/components/ui/button";
 import convertJsonToExcel from "@/components/fetchhook";
-
+import { useData } from "@/components/dataProvider";
+import CompanyInputForm from "./form";
 
 export default function DataTablePage() {
-  const [data, refetchData] = useFetchData();
+  const { data, fetchData } = useData();
 
   return (
-    <div>
-      <div className="container mx-auto py-10 justify-center">
-        {data.length === 0 ? (
-          <div className="flex items-center justify-center">
-            <h1 className=" text-2xl">
-              Loading Data Form Server.......
-            </h1>
-          </div>
-        ) : (
-          <div>
-            <div className="flex flex-row justify-evenly m-12">
+    <div className="container mx-auto py-10 justify-center">
+      {data.length === 0 ? (
+        <div className="flex items-center justify-center">
+          <h1 className="text-2xl">Loading Data From Server.......</h1>
+        </div>
+      ) : (
+        <div>
+          <div className="flex flex-row justify-evenly m-12">
             <Button
-                className=""
-                onClick={async function handletoButton() {
-                  try {
-                    const response = await fetch(
-                      "https://api-codehub.vercel.app/api/conferences/company-input"
-                    );
-                    const newData: SheetError[] = await response.json();
+                variant="success"
 
-                    convertJsonToExcel("data", newData);
-                  } catch (error) {
-                    console.error("Error fetching data:", error);
-                  }
-                }}
-              >
-                Export Data
-              </Button>
-              <Button className=" " onClick={refetchData}>
-                Refresh
-              </Button>
-            </div>
-            <DataTable columns={columns} data={data} />
+              onClick={async () => {
+                try {
+                  const response = await fetch("https://api-codehub.vercel.app/api/conferences/company-input");
+const newData: SheetError[] = await response.json();
+
+const filteredData = newData.map(({ _id, createdAt, updatedAt, __v, ...rest }) => rest);
+
+convertJsonToExcel("data", filteredData);
+
+                } catch (error) {
+                  console.error("Error fetching data:", error);
+                }
+              }}
+            >
+              Export Data
+            </Button>
+            <Button 
+                variant="success"
+
+            onClick={fetchData}>Refresh</Button>
           </div>
-        )}
-      </div>
+          <CompanyInputForm></CompanyInputForm>
+          <DataTable
+          initialData={data}
+           columns={columns} />
+        </div>
+      )}
     </div>
   );
 }
 
-export function useFetchData(): [SheetError[], () => void] {
-  const [data, setData] = useState<SheetError[]>([]);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch(
-        "https://api-codehub.vercel.app/api/conferences/company-input"
-      );
-      const newData: SheetError[] = await response.json();
-      setData(newData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+// export function useFetchData(): [SheetError[], () => void] {
+//   const [data, setData] = useState<SheetError[]>([]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+//   const fetchData = async () => {
+//     try {
+//       const response = await fetch(
+//         "https://api-codehub.vercel.app/api/conferences/company-input"
+//       );
+//       const newData: SheetError[] = await response.json();
+//       setData(newData);
+//     } catch (error) {
+//       console.error("Error fetching data:", error);
+//     }
+//   };
 
-  return [data, fetchData];
-}
+//   useEffect(() => {
+//     fetchData();
+//   }, []);
+
+//   return [data, fetchData];
+// }

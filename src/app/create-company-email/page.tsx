@@ -240,7 +240,8 @@ export default function CompanyInputForm() {
             </Select>
           </div>
 
-          <Button type="submit">
+          <Button 
+          variant="success" type="submit">
             {submittedData ? "Submitting..." : "Submit"}
           </Button>
         </form>

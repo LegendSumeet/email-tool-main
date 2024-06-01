@@ -101,7 +101,10 @@ export default function SignupPage() {
                         </div>
                     </CardContent>
                     <CardFooter className="flex flex-col space-y-2">
-                        <Button className="w-full" disabled={user.username.length>0 && user.email.length >0 && user.password.length >0 ? false : true} onClick={onSignup}>
+                        <Button 
+                variant="success"
+
+                        className="w-full" disabled={user.username.length>0 && user.email.length >0 && user.password.length >0 ? false : true} onClick={onSignup}>
                             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Signup"}
                         </Button>
                         <Link className="w-full" href='/'><Button className="w-full" variant='outline'>Visit Login Page</Button></Link>

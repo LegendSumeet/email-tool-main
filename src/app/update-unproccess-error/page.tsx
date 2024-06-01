@@ -2,16 +2,13 @@
 import { Button } from "@/components/ui/button";
 import CompanyInputForm from "./form";
 import DataTablePage from "./showdatatable";
-import convertJsonToExcel, {  } from "@/components/fetchhook";
-export default async function DemoPage() {
+import { DataProvider } from "@/components/dataProvider";
+
+export default function HomePage() {
   return (
-    <div>
-      
-      <CompanyInputForm />
-      <DataTablePage />
-      
-    
-    </div>
-    //
+    <DataProvider>
+        <DataTablePage />
+    </DataProvider>
   );
 }
+

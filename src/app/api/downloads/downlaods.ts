@@ -10,7 +10,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const filePath = join(process.cwd(), 'output.xlsx');
   try {
     await writeFile(filePath, buffer);
-    // Send the file as a response
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', 'attachment; filename=output.xlsx');
     res.status(200).send(buffer);
