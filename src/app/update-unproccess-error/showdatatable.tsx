@@ -16,7 +16,7 @@ export default function DataTablePage() {
   }, []);
 
   return (
-    <div className="container mx-auto py-10 justify-center">
+    <div className="  w-11/12 mx-auto py-2 justify-center">
       {data.length === 0 ? (
         <div className="flex items-center justify-center">
           <LoadingScreen></LoadingScreen>

@@ -28,7 +28,7 @@ import { useData } from "@/components/dataProvider";
 
 interface FormValues {
   companyName: string;
-  TotalRecords: string;
+  TotalRecords: Number;
   mailselectedDomain: string;
 }
 
@@ -37,12 +37,15 @@ const FormSchema = z.object({
     message: "Username must be at least 2 characters.",
   }),
   TotalRecords: z.string().min(1).max(1000, {
+
     message: "Total Records must be at least 10",
   }),
   mailselectedDomain: z.string().min(1, {
     message: "Please select a domain",
   }),
 });
+
+
 
 export default function CompanyInputForm() {
   const { data, fetchData } = useData();
@@ -113,6 +116,7 @@ export default function CompanyInputForm() {
             title: "Success",
             description: "Form data submitted successfully",
           });
+          form.reset();
         } else {
           toast({
             title: "Error",
@@ -134,13 +138,13 @@ export default function CompanyInputForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-row justify-center space-x-6"
+          className="flex flex-row justify-center space-x-2"
         >
           <FormField
             control={form.control}
             name="companyName"
             render={({ field }) => (
-              <FormItem className=" w-10/12">
+              <FormItem className=" w-11/12">
                 <FormControl>
                   <Input placeholder="Company Name" {...field} />
                 </FormControl>
@@ -152,7 +156,7 @@ export default function CompanyInputForm() {
             control={form.control}
             name="TotalRecords"
             render={({ field }) => (
-              <FormItem className="w-1/2">
+              <FormItem className="w-11/12">
                 <FormControl>
                   <Input placeholder="Total Records" {...field} />
                 </FormControl>
@@ -164,7 +168,7 @@ export default function CompanyInputForm() {
             control={form.control}
             name="mailselectedDomain"
             render={({ field }) => (
-              <FormItem className="w-10/12">
+              <FormItem className="w-11/12">
                 <FormControl>
                   <Input placeholder="Website Domain" {...field} />
                 </FormControl>
@@ -179,7 +183,7 @@ export default function CompanyInputForm() {
             }}
           >
             <SelectTrigger
-              className=" w-10/12"
+              className=" w-11/12"
             >
               <SelectValue placeholder="Choose Domain" />
             </SelectTrigger>
@@ -196,7 +200,7 @@ export default function CompanyInputForm() {
           >
             <SelectTrigger
 
-              className=" w-10/12"
+              className=" w-11/12"
             >
               <SelectValue placeholder="Mail Pattern" />
             </SelectTrigger>
