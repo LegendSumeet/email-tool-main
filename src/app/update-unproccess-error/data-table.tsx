@@ -50,16 +50,17 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="rounded-md border border-separate border-spacing-2 border-gray-300 bg-gray-200">
-        <Table className="w-full" >
-          <TableHeader className="bg-gray-300 text-white">
+      <div className="rounded-md border border-spacing-2 border-gray-300 bg-gray-200">
+        <Table className="w-full border border-black" >
+          <TableHeader className="bg-gray-300 text-green font-bold">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
-                className="border-b border-gray-300"
+              
+                className="border-b border border-black"
                key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
-                    className="p-2 text-wrap text-xl text-left"
+                    className="p-2 border border-black text-wrap text-xl text-center bg-gray-300 text-green-700 font-extrabold"
                    key={header.id}>
                     {header.isPlaceholder
                       ? null
@@ -73,7 +74,7 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody
-          className=" text-black text-center bg-gray-100 text-xl"
+          className=" text-black border border-grey text-center bg-gray-100 text-xl"
           >
 
             {table.getRowModel().rows?.length ? (
@@ -83,7 +84,9 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                    className="p-2 border border-grey-200 text-wrap text-xl text-center bg-gray-100 text-green-700 font-extrabold"
+                     key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

@@ -21,17 +21,17 @@ export default function HomePage() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink
-                            className="text-green-500 text-2xl font-bold"
+                className="text-green-500 text-2xl font-bold"
 
-               href="/">Home</BreadcrumbLink>
+                href="/">Home</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink
-              className="text-green-500 text-2xl font-bold"
-               href="/update-unproccess-error">Update Missing Data</BreadcrumbLink>
+                className="text-green-500 text-2xl font-bold"
+                href="/update-unproccess-error">Update Missing Data</BreadcrumbLink>
             </BreadcrumbItem>
-            
+
           </BreadcrumbList>
         </Breadcrumb>
 

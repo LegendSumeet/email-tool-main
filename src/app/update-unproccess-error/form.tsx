@@ -145,13 +145,13 @@ export default function CompanyInputForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-row justify-center space-x-2"
+          className="flex flex-row justify-center space-x-1"
         >
           <FormField
             control={form.control}
             name="companyName"
             render={({ field }) => (
-              <FormItem className=" w-11/12">
+              <FormItem className=" w-11/12 text-xl text-green-700 font-bold">
                 <FormControl>
                   <Input placeholder="Company Name" {...field} />
                 </FormControl>
@@ -163,7 +163,7 @@ export default function CompanyInputForm() {
             control={form.control}
             name="error"
             render={({ field }) => (
-              <FormItem className="w-11/12">
+              <FormItem className="w-11/12 text-green-700 font-bold">
                 <FormControl>
                   <Input placeholder="Error" {...field} />
                 </FormControl>
@@ -175,9 +175,11 @@ export default function CompanyInputForm() {
             control={form.control}
             name="TotalRecords"
             render={({ field }) => (
-              <FormItem className="w-11/12">
+              <FormItem className="w-11/12 text-xl text-green-700 font-bold">
                 <FormControl>
-                  <Input placeholder="Total Records" {...field} />
+                  <Input 
+                  
+                  placeholder="Total Records" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -187,7 +189,7 @@ export default function CompanyInputForm() {
             control={form.control}
             name="mailselectedDomain"
             render={({ field }) => (
-              <FormItem className="w-11/12">
+              <FormItem className="w-11/12 text-green-700 font-bold">
                 <FormControl>
                   <Input placeholder="Website Domain" {...field} />
                 </FormControl>
@@ -202,7 +204,7 @@ export default function CompanyInputForm() {
             }}
           >
             <SelectTrigger
-              className=" w-11/12"
+              className=" w-11/12 text-green-700 font-bold"
             >
               <SelectValue placeholder="Choose Domain" />
             </SelectTrigger>
@@ -219,7 +221,7 @@ export default function CompanyInputForm() {
           >
             <SelectTrigger
 
-              className=" w-11/12"
+              className=" w-11/12 text-green-700 font-bold"
             >
               <SelectValue placeholder="Mail Pattern" />
             </SelectTrigger>
