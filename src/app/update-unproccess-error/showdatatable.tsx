@@ -5,9 +5,15 @@ import convertJsonToExcel from "@/components/fetchhook";
 import { useData } from "@/components/dataProvider";
 import CompanyInputForm from "./form";
 import LoadingScreen from "@/components/loading";
+import { useEffect } from "react";
 
 export default function DataTablePage() {
   const { data, fetchData } = useData();
+
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="container mx-auto py-10 justify-center">
@@ -19,16 +25,16 @@ export default function DataTablePage() {
         <div>
           <div className="flex flex-row justify-evenly m-12">
             <Button
-                variant="success"
+              variant="success"
 
               onClick={async () => {
                 try {
                   const response = await fetch("https://api-codehub.vercel.app/api/conferences/company-input");
-const newData: SheetError[] = await response.json();
+                  const newData: SheetError[] = await response.json();
 
-const filteredData = newData.map(({ _id, createdAt, updatedAt, __v, ...rest }) => rest);
+                  const filteredData = newData.map(({ _id, createdAt, updatedAt, __v, ...rest }) => rest);
 
-convertJsonToExcel("data", filteredData);
+                  convertJsonToExcel("data", filteredData);
 
                 } catch (error) {
                   console.error("Error fetching data:", error);
@@ -37,15 +43,15 @@ convertJsonToExcel("data", filteredData);
             >
               Export Data
             </Button>
-            <Button 
-                variant="success"
+            <Button
+              variant="success"
 
-            onClick={fetchData}>Refresh</Button>
+              onClick={fetchData}>Refresh</Button>
           </div>
           <CompanyInputForm></CompanyInputForm>
           <DataTable
-          initialData={data}
-           columns={columns} />
+            initialData={data}
+            columns={columns} />
         </div>
       )}
     </div>
