@@ -25,14 +25,19 @@ import { Router } from "lucide-react";
 import { useRouter } from "next/navigation";
 import convertJsonToExcel from "@/components/fetchhook";
 import { useData } from "@/components/dataProvider";
+import { error } from "console";
 
 interface FormValues {
+  error: string;
   companyName: string;
   TotalRecords: string;
   mailselectedDomain: string;
 }
 
 const FormSchema = z.object({
+  error: z.string().min(2, {
+    message: "error must not be empty.",
+  }),
   companyName: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
@@ -68,6 +73,7 @@ export default function CompanyInputForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      error: "",
       companyName: "",
       TotalRecords: "",
       mailselectedDomain: "",
@@ -117,6 +123,7 @@ export default function CompanyInputForm() {
             description: "Form data submitted successfully",
           });
           form.reset();
+          fetchData();
         } else {
           toast({
             title: "Error",
@@ -147,6 +154,18 @@ export default function CompanyInputForm() {
               <FormItem className=" w-11/12">
                 <FormControl>
                   <Input placeholder="Company Name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="error"
+            render={({ field }) => (
+              <FormItem className="w-11/12">
+                <FormControl>
+                  <Input placeholder="Error" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -223,7 +242,7 @@ export default function CompanyInputForm() {
             variant="success"
 
             type="submit" className="self-center">
-            {submittedData ? "Submitting..." : "Add Item"}
+            {submittedData ? "Submitting..." : "Save"}
           </Button>
         </form>
       </Form>

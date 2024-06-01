@@ -21,8 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider enableColorScheme attribute="class" defaultTheme="light" enableSystem>
-          <DataProvider> 
+        <ThemeProvider
+        themes={['light', 'dark']}
+
+          enableColorScheme attribute="class" defaultTheme="light">
+          <DataProvider  >
             {children}
             <Toaster />
           </DataProvider>

@@ -4,9 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FaSync } from "react-icons/fa";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 
 export type SheetError = {
+  srno: number;
   _id: string;
+  error: string;
   companyName: string;
   TotalRecords: string;
   mailselectedDomain: string;
@@ -19,7 +22,7 @@ export type SheetError = {
 
 interface CellProps {
   row: {
-    original?: SheetError; // Make original property optional
+    original?: SheetError;
   };
 }
 
@@ -65,18 +68,20 @@ const DomainCell: React.FC<CellProps> = ({ row }) => {
 
   return (
     <div>
-      <div className="flex items-center">
+      <div className="flex items-center w-10/12">
         <Input
           type="email"
           placeholder=""
           value={mailselectedDomain}
           onChange={(e) => setMailselectedDomain(e.target.value)}
         />
-        <FaSync
-          title="Update Domain"
-          className="ml-2 cursor-pointer"
+        <Button
+        variant="success"
+        title="Update Domain"
+        
+          className="ml-2 cursor-pointer w-1/2"
           onClick={() => updateDomain(mailselectedDomain, 'mailselectedDomain')}
-        />
+        > update </Button>
       </div>
       <div className="py-2">
         <Select
@@ -174,17 +179,27 @@ const MailPatternCell: React.FC<CellProps> = ({ row }) => {
 
 export const columns: ColumnDef<SheetError>[] = [
   {
+    accessorKey: "srno",
+    header: "Sr No",
+  },
+
+  {
     accessorKey: "companyName",
     header: "Company",
+  },
+  {
+    accessorKey: "error",
+    header: "Error",
+  },
+
+  {
+    accessorKey: "TotalRecords",
+    header: "Total Records",
   },
   {
     accessorKey: "updatedAt",
     header: "Upload Date",
     cell: (props) => <div>{props.row.original?.updatedAt.split("T")[0]}</div>,
-  },
-  {
-    accessorKey: "TotalRecords",
-    header: "Total Records",
   },
   {
     accessorKey: "selectedDomain",
@@ -196,4 +211,5 @@ export const columns: ColumnDef<SheetError>[] = [
     header: "Mail Patterns",
     cell: MailPatternCell,
   },
+  
 ];

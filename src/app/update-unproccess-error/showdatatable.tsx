@@ -23,32 +23,7 @@ export default function DataTablePage() {
         </div>
       ) : (
         <div>
-          <div className="flex flex-row justify-evenly m-12">
-            <Button
-              variant="success"
-
-              onClick={async () => {
-                try {
-                  const response = await fetch("https://api-codehub.vercel.app/api/conferences/company-input");
-                  const newData: SheetError[] = await response.json();
-
-                  const filteredData = newData.map(({ _id, createdAt, updatedAt, __v, ...rest }) => rest);
-
-                  convertJsonToExcel("data", filteredData);
-
-                } catch (error) {
-                  console.error("Error fetching data:", error);
-                }
-              }}
-            >
-              Export Data
-            </Button>
-            <Button
-              variant="success"
-
-              onClick={fetchData}>Refresh</Button>
-          </div>
-          <CompanyInputForm></CompanyInputForm>
+          
           <DataTable
             initialData={data}
             columns={columns} />
