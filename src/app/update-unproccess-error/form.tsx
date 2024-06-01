@@ -28,7 +28,7 @@ import { useData } from "@/components/dataProvider";
 
 interface FormValues {
   companyName: string;
-  TotalRecords: Number;
+  TotalRecords: string;
   mailselectedDomain: string;
 }
 
