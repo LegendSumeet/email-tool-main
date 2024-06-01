@@ -4,6 +4,7 @@ import { columns, SheetError } from "./colums";
 import convertJsonToExcel from "@/components/fetchhook";
 import { useData } from "@/components/dataProvider";
 import CompanyInputForm from "./form";
+import LoadingScreen from "@/components/loading";
 
 export default function DataTablePage() {
   const { data, fetchData } = useData();
@@ -12,7 +13,7 @@ export default function DataTablePage() {
     <div className="container mx-auto py-10 justify-center">
       {data.length === 0 ? (
         <div className="flex items-center justify-center">
-          <h1 className="text-2xl">Loading Data From Server.......</h1>
+          <LoadingScreen></LoadingScreen>
         </div>
       ) : (
         <div>
