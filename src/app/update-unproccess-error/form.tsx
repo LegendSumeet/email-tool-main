@@ -123,7 +123,6 @@ export default function CompanyInputForm() {
             description: "Form data submitted successfully",
           });
           form.reset();
-          setShowDomainInput(false)
           fetchData();
         } else {
           toast({
@@ -198,32 +197,46 @@ export default function CompanyInputForm() {
               </FormItem>
             )}
           /> */}
-          {!showDomainInput ? (
-            <Select
+          {showDomainInput ? (
+             <div className=" flex flex-col w-10/12 space-y-3">
 
-              onValueChange={(value) => {
-                handleDomainChange(value);
-              }}
-            >
-              <SelectTrigger
-                className=" w-11/12 text-green-700 font-bold"
-              >
-                <SelectValue placeholder="Choose Domain" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value=".com">.com</SelectItem>
-                <SelectItem value=".in">.in</SelectItem>
-                <SelectItem value=".org">.org</SelectItem>
-                <SelectItem value="add"> Add Domain</SelectItem>
-              </SelectContent>
-            </Select>
-          ) : (
-            <Input
-              placeholder="Domain"
-              value={Domain}
-              onChange={(e) => setDomain(e.target.value)}
-            />
-          )}
+             <Input
+               className="w-11/12 text-green-700 font-bold"
+               placeholder="Domain"
+               value={Domain}
+               onChange={(e) => setDomain(e.target.value)}
+             />
+             <Select onValueChange={(value) => handleDomainChange(value)}>
+               <SelectTrigger className="w-11/12 text-green-700 font-bold">
+                 <SelectValue placeholder="Choose Domain" />
+               </SelectTrigger>
+               <SelectContent>
+                 <SelectItem value=".com">.com</SelectItem>
+                 <SelectItem value=".in">.in</SelectItem>
+                 <SelectItem value=".org">.org</SelectItem>
+                 <SelectItem value="add">Add Domain</SelectItem>
+               </SelectContent>
+             </Select>
+           </div>
+ 
+          ):(
+
+          <Select onValueChange={(value) => handleDomainChange(value)}>
+            <SelectTrigger className="w-11/12 text-green-700 font-bold">
+              <SelectValue placeholder="Choose Domain" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value=".com">.com</SelectItem>
+              <SelectItem value=".in">.in</SelectItem>
+              <SelectItem value=".org">.org</SelectItem>
+              <SelectItem value="add">Add Domain</SelectItem>
+            </SelectContent>
+          </Select>
+    
+  )}
+         
+
+
           <Select
             onValueChange={(value) => {
               handleMailPatternChange(value);
@@ -251,9 +264,10 @@ export default function CompanyInputForm() {
             </SelectContent>
           </Select>
           <Button
+
             variant="success"
 
-            type="submit" className="self-center">
+            type="submit" className="">
             {submittedData ? "Submitting..." : "Save"}
           </Button>
         </form>

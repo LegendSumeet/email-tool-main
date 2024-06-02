@@ -38,12 +38,13 @@ export default function HomePage() {
 
       </div>
 
-      <div className="flex flex-row justify-evenly m-12">
+      <div className="flex flex-row justify-center m-12 p-6 space-x-1">
 
 
 
 
         <Button
+        
           variant="success"
 
           onClick={async () => {
