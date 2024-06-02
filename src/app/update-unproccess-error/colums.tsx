@@ -260,7 +260,7 @@ export const columns: ColumnDef<SheetError>[] = [
   },
   {
     accessorKey: "Domain",
-    header: "Actions",
+    header: "Action",
     cell: DomainUpdateActions
 
   }
