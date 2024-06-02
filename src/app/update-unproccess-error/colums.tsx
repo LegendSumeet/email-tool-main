@@ -12,12 +12,11 @@ export type SheetError = {
   error: string;
   companyName: string;
   TotalRecords: string;
-  mailselectedDomain: string;
-  selectedDomain: string;
+  Domain: string;
   updatedAt: string;
   createdAt: string;
   __v: Number;
-  selectedMailPattern: string;
+  MailPattern: string;
 };
 
 interface CellProps {
@@ -26,21 +25,25 @@ interface CellProps {
   };
 }
 
+
+
+var DomainUpdates:string ;
+
 const DomainCell: React.FC<CellProps> = ({ row }) => {
-  const initialMailselectedDomain = row.original?.mailselectedDomain || "";
-  const initialSelectedDomain = row.original?.selectedDomain || "";
-  const [mailselectedDomain, setMailselectedDomain] = useState(initialMailselectedDomain);
-  const [selectedDomain, setSelectedDomain] = useState(initialSelectedDomain);
+  const initialSelectedDomain = row.original?.Domain || "";
+  const [Domain, setDomain] = useState(initialSelectedDomain);
+  const [showDomainInput, setShowDomainInput] = useState(false);
+
   const { toast } = useToast();
 
   useEffect(() => {
     if (row.original) {
-      setMailselectedDomain(row.original.mailselectedDomain || "");
-      setSelectedDomain(row.original.selectedDomain || "");
+      setDomain(row.original.Domain || "");
     }
   }, [row.original]);
 
   const updateDomain = async (domain: string, field: keyof SheetError) => {
+
     const updatedRow = {
       [field]: domain,
     };
@@ -71,25 +74,22 @@ const DomainCell: React.FC<CellProps> = ({ row }) => {
       <div className="flex items-center w-10/12">
         <Input
           type="email"
-          placeholder=""
-          value={mailselectedDomain}
-          onChange={(e) => setMailselectedDomain(e.target.value)}
+          placeholder="Enter Domain"
+          value={Domain}
+          onChange={(e) => {setDomain(e.target.value)
+            DomainUpdates = e.target.value
+
+          }}
         />
-        <Button
-        variant="success"
-        title="Update Domain"
-        
-          className="ml-2 cursor-pointer w-1/2"
-          onClick={() => updateDomain(mailselectedDomain, 'mailselectedDomain')}
-        > update </Button>
+
       </div>
       <div className="py-2">
         <Select
           onValueChange={(value) => {
-            setSelectedDomain(value);
-            updateDomain(value, 'selectedDomain');
+            setDomain(value);
+            updateDomain(value, 'Domain');
           }}
-          value={selectedDomain}
+          value={Domain}
         >
           <SelectTrigger className="w-[182px]">
             <SelectValue placeholder="Choose Domain" />
@@ -105,21 +105,68 @@ const DomainCell: React.FC<CellProps> = ({ row }) => {
   );
 };
 
+
+const DomainUpdateActions: React.FC<CellProps> = ({ row  }) => {
+  const { toast } = useToast();
+
+  const updateDomain = async (domain: string, field: keyof SheetError) => {
+
+
+
+    const updatedRow = {
+      [field]: domain,
+    };
+
+    console.log(updatedRow);
+
+    try {
+      const url = `https://api-codehub.vercel.app/api/conferences/company-input-edit/${row.original?._id}`;
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedRow),
+      });
+
+      if (response.status === 200) {
+        toast({
+          title: "Domain Updated",
+          description: "Domain updated successfully",
+        });
+      }
+    } catch (error) {
+      console.error("Error updating row:", error);
+    }
+  };
+  return (
+    <div>
+      <Button
+        variant="success"
+        title="Update Domain"
+
+        className="ml-2 cursor-pointer w-1/2"
+        onClick={() => updateDomain(DomainUpdates, 'Domain')}
+      > update </Button>
+    </div>
+  )
+}
+
 const MailPatternCell: React.FC<CellProps> = ({ row }) => {
-  const initialMailPattern = row.original?.selectedMailPattern || "";
+  const initialMailPattern = row.original?.MailPattern || "";
   const [mailPattern, setMailPattern] = useState(initialMailPattern);
   const [showSelectedPattern, setShowSelectedPattern] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     if (row.original) {
-      setMailPattern(row.original.selectedMailPattern || "");
+      setMailPattern(row.original.MailPattern || "");
     }
   }, [row.original]);
 
   const updateMailPattern = async (pattern: string) => {
     const updatedRow = {
-      selectedMailPattern: pattern,
+      MailPattern: pattern,
     };
 
     try {
@@ -207,9 +254,15 @@ export const columns: ColumnDef<SheetError>[] = [
     cell: DomainCell,
   },
   {
-    accessorKey: "selectedMailPattern",
+    accessorKey: "MailPattern",
     header: "Mail Patterns",
     cell: MailPatternCell,
   },
-  
+  {
+    accessorKey: "Domain",
+    header: "Actions",
+    cell: DomainUpdateActions
+
+  }
+
 ];

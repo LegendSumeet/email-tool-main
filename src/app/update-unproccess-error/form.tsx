@@ -31,22 +31,17 @@ interface FormValues {
   error: string;
   companyName: string;
   TotalRecords: string;
-  mailselectedDomain: string;
 }
 
 const FormSchema = z.object({
-  error: z.string().min(2, {
+  error: z.string().min(0, {
     message: "error must not be empty.",
   }),
   companyName: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
   TotalRecords: z.string().min(1).max(1000, {
-
     message: "Total Records must be at least 10",
-  }),
-  mailselectedDomain: z.string().min(1, {
-    message: "Please select a domain",
   }),
 });
 
@@ -54,19 +49,25 @@ const FormSchema = z.object({
 
 export default function CompanyInputForm() {
   const { data, fetchData } = useData();
+  const [showDomainInput, setShowDomainInput] = useState(false);
 
-  const [selectedDomain, setSelectedDomain] = useState("");
-  const [selectedMailPattern, setSelectedMailPattern] = useState("");
+  const [Domain, setDomain] = useState("");
+  const [MailPattern, setMailPattern] = useState("");
   const [submittedData, setSubmittedData] = useState(false);
   const router = useRouter();
 
   const handleDomainChange = (value: any) => {
-    setSelectedDomain(value);
-    console.log("Selected Domain:", value);
+    if (value == 'add') {
+      setShowDomainInput(true)
+    }
+    else {
+      setDomain(value);
+      console.log("Selected Domain:", value);
+    }
   };
 
   const handleMailPatternChange = (value: any) => {
-    setSelectedMailPattern(value);
+    setMailPattern(value);
     console.log("Selected Mail Pattern:", value);
   };
 
@@ -76,7 +77,6 @@ export default function CompanyInputForm() {
       error: "",
       companyName: "",
       TotalRecords: "",
-      mailselectedDomain: "",
     },
   });
 
@@ -84,8 +84,8 @@ export default function CompanyInputForm() {
     setSubmittedData(true);
     const formData = {
       ...data,
-      selectedDomain,
-      selectedMailPattern,
+      Domain,
+      MailPattern,
     };
 
     console.log("Form data to be sent:", formData);
@@ -105,8 +105,8 @@ export default function CompanyInputForm() {
   function sendDataToAPI(data: FormValues) {
     const formData = {
       ...data,
-      selectedDomain,
-      selectedMailPattern,
+      Domain,
+      MailPattern,
     };
     fetch("https://api-codehub.vercel.app/api/conferences/company-input", {
       method: "POST",
@@ -123,6 +123,7 @@ export default function CompanyInputForm() {
             description: "Form data submitted successfully",
           });
           form.reset();
+          setShowDomainInput(false)
           fetchData();
         } else {
           toast({
@@ -177,17 +178,17 @@ export default function CompanyInputForm() {
             render={({ field }) => (
               <FormItem className="w-11/12 text-xl text-green-700 font-bold">
                 <FormControl>
-                  <Input 
-                  
-                  placeholder="Total Records" {...field} />
+                  <Input
+
+                    placeholder="Total Records" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
-            name="mailselectedDomain"
+            name="Domain"
             render={({ field }) => (
               <FormItem className="w-11/12 text-green-700 font-bold">
                 <FormControl>
@@ -196,24 +197,33 @@ export default function CompanyInputForm() {
                 <FormMessage />
               </FormItem>
             )}
-          />
-          <Select
+          /> */}
+          {!showDomainInput ? (
+            <Select
 
-            onValueChange={(value) => {
-              handleDomainChange(value);
-            }}
-          >
-            <SelectTrigger
-              className=" w-11/12 text-green-700 font-bold"
+              onValueChange={(value) => {
+                handleDomainChange(value);
+              }}
             >
-              <SelectValue placeholder="Choose Domain" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value=".com">.com</SelectItem>
-              <SelectItem value=".in">.in</SelectItem>
-              <SelectItem value=".org">.org</SelectItem>
-            </SelectContent>
-          </Select>
+              <SelectTrigger
+                className=" w-11/12 text-green-700 font-bold"
+              >
+                <SelectValue placeholder="Choose Domain" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value=".com">.com</SelectItem>
+                <SelectItem value=".in">.in</SelectItem>
+                <SelectItem value=".org">.org</SelectItem>
+                <SelectItem value="add"> Add Domain</SelectItem>
+              </SelectContent>
+            </Select>
+          ) : (
+            <Input
+              placeholder="Domain"
+              value={Domain}
+              onChange={(e) => setDomain(e.target.value)}
+            />
+          )}
           <Select
             onValueChange={(value) => {
               handleMailPatternChange(value);
