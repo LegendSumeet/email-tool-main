@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import convertJsonToExcel from "@/components/fetchhook";
 import { useData } from "@/components/dataProvider";
 import { error } from "console";
+import FileUpload from "./uploadbutton";
 
 interface FormValues {
   error: string;
@@ -270,8 +271,10 @@ export default function CompanyInputForm() {
             type="submit" className="">
             {submittedData ? "Submitting..." : "Save"}
           </Button>
+         
         </form>
       </Form>
+      
     </div>
 
   );

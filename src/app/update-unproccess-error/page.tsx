@@ -6,11 +6,12 @@ import { DataProvider, useData } from "@/components/dataProvider";
 import { SheetError } from "./colums";
 import convertJsonToExcel from "@/components/fetchhook";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-
+import FileUpload from "./uploadbutton";
+import { ArrowUpIcon, ArrowPathIcon } from '@heroicons/react/24/solid';
 export default function HomePage() {
 
   const { data, fetchData } = useData();
-
+  const refersh = async () => fetchData();
 
   return (
     <DataProvider>
@@ -38,35 +39,42 @@ export default function HomePage() {
 
       </div>
 
-      <div className="flex flex-row justify-center m-12 p-6 space-x-1">
-
-
-
-
-        <Button
-        
+      <div className="flex flex-row justify-end  m-12 p-6 space-x-1">
+      <Button
           variant="success"
 
-          onClick={async () => {
-            try {
-              const response = await fetch("https://api-codehub.vercel.app/api/conferences/company-input");
-              const newData: SheetError[] = await response.json();
+          onClick={refersh}>
+                        <ArrowPathIcon className='h-5 w-5 mr-2' />
 
-              const filteredData = newData.map(({ _id, createdAt, updatedAt, __v, ...rest }) => rest);
+            Refresh</Button>
+        <div className="flex flex-row space-x-4">
+          <FileUpload></FileUpload>
+          <Button
 
-              convertJsonToExcel("data", filteredData);
+            variant="success"
 
-            } catch (error) {
-              console.error("Error fetching data:", error);
-            }
-          }}
-        >
-          Export Data
-        </Button>
-        <Button
-          variant="success"
+            onClick={async () => {
+              try {
+                const response = await fetch("https://api-codehub.vercel.app/api/conferences/company-input");
+                const newData: SheetError[] = await response.json();
 
-          onClick={fetchData}>Refresh</Button>
+                const filteredData = newData.map(({ _id, createdAt, updatedAt, __v, ...rest }) => rest);
+
+                convertJsonToExcel("data", filteredData);
+
+              } catch (error) {
+                console.error("Error fetching data:", error);
+              }
+            }}
+          >
+            <ArrowUpIcon className='h-5 w-5 mr-2' />
+
+
+            Export Data
+          </Button>
+
+        </div>
+
       </div>
       <CompanyInputForm></CompanyInputForm>
 
